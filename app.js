@@ -44,6 +44,7 @@ let timeline = [];
 let currentTaskIndex = 0;
 let isRunning = false;
 let isFinished = false;
+let isPending = false; // Dang cho den dung gio thiet lap moi bat dau chay
 let timerInterval = null;
 let warnedTaskIndex = -1; // Viec da phat am canh bao con 1 phut, tranh phat lap lai
 let taskStartTimestamp = null; // Thoi diem (mili giay) viec hien tai bat dau duoc dem nguoc
@@ -319,6 +320,37 @@ function updateClock() {
     }
 
     checkAutoStart(now);
+
+    checkPendingStart(now);
+}
+
+
+/* Kiem tra xem da den dung gio thiet lap de bat dau chua,
+   ap dung khi nguoi dung bam START nhung chua den gio */
+function checkPendingStart(now) {
+
+    try {
+
+        if (!isPending) {
+            return;
+        }
+
+        const nowMinutes =
+            now.getHours() * 60 + now.getMinutes();
+
+        const startMinutes = timeToMinutes(
+            appData.startTime
+        );
+
+        if (nowMinutes >= startMinutes) {
+
+            beginTimelineNow();
+        }
+
+    } catch (error) {
+
+        console.log("Loi khi kiem tra trang thai cho:", error);
+    }
 }
 
 
@@ -331,7 +363,7 @@ function checkAutoStart(now) {
             return;
         }
 
-        if (isRunning || isFinished) {
+        if (isRunning || isFinished || isPending) {
             return;
         }
 
@@ -584,13 +616,60 @@ function updateCountdown() {
 }
 
 
-/* Bat dau timeline */
+/* Bam nut START: neu chua den gio thiet lap thi cho, den dung gio moi chay */
 function startTimeline() {
 
     if (timeline.length === 0) {
         return;
     }
 
+    const now = new Date();
+
+    const nowMinutes =
+        now.getHours() * 60 + now.getMinutes();
+
+    const startMinutes = timeToMinutes(
+        appData.startTime
+    );
+
+    if (nowMinutes < startMinutes) {
+
+        armPendingStart();
+
+        return;
+    }
+
+    beginTimelineNow();
+}
+
+
+/* Chuyen sang trang thai cho den dung gio thiet lap */
+function armPendingStart() {
+
+    isPending = true;
+    isRunning = false;
+    isFinished = false;
+
+    if (timerInterval) {
+
+        clearInterval(timerInterval);
+
+        timerInterval = null;
+    }
+
+    document.getElementById(
+        "btnStart"
+    ).textContent =
+        `⏳ WAITING FOR ${appData.startTime}`;
+
+    speak(`Okay! I will start at ${formatTimeForSpeech(appData.startTime)}.`);
+}
+
+
+/* Bat dau thuc su chay timeline ngay tai thoi diem nay */
+function beginTimelineNow() {
+
+    isPending = false;
     isRunning = true;
     isFinished = false;
 
@@ -620,6 +699,27 @@ function startTimeline() {
 
     // Doc bang giong noi: bat dau viec dau tien
     speak(`Let's begin! Time to ${timeline[currentTaskIndex].name}.`);
+}
+
+
+/* Doi gio dang "HH:mm" sang dang de doc bang giong noi, vi du "6:00 AM" */
+function formatTimeForSpeech(timeString) {
+
+    const parts = timeString.split(":");
+
+    let hours = parseInt(parts[0], 10);
+    const minutes = parts[1];
+
+    const period = hours >= 12 ? "PM" : "AM";
+
+    let hours12 = hours % 12;
+
+    if (hours12 === 0) {
+
+        hours12 = 12;
+    }
+
+    return `${hours12}:${minutes} ${period}`;
 }
 
 
@@ -719,6 +819,7 @@ function resetTimeline() {
 
     isRunning = false;
     isFinished = false;
+    isPending = false;
 
     if (timerInterval) {
 
@@ -1137,6 +1238,7 @@ function saveSettings() {
 
     isRunning = false;
     isFinished = false;
+    isPending = false;
 
     if (timerInterval) {
 
