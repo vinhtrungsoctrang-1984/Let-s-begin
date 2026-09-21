@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LÂM VĨNH PHÁT's Morning Schedule</title>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1976d2">
+    <link rel="apple-touch-icon" href="icons/icon-apple-touch.png">
+    <link rel="icon" type="image/png" href="icons/icon-192.png">
+</head>
+
+<body>
+
+<div id="audioUnlockBanner" class="audio-unlock-banner hidden">
+    🔔 Tap here to enable voice alerts
+</div>
+
+<div class="app">
+
+    <header class="header">
+        <div>
+            <h1>🌞 LÂM VĨNH PHÁT's Morning Schedule</h1>
+            <p>Getting Ready for School</p>
+        </div>
+
+        <button id="btnSettings" class="settings-button">
+            ⚙ Settings
+        </button>
+    </header>
+
+    <main>
+
+        <!-- Man hinh chinh -->
+        <section id="screenMain" class="screen">
+
+            <div class="clock-box">
+                <div id="currentClock">00:00:00</div>
+                <div id="currentDate">--/--/----</div>
+            </div>
+
+            <div class="current-task-box">
+
+                <div id="taskContent">
+
+                    <div class="step-info">
+                        <span id="stepNumber">Task 1 / 5</span>
+                    </div>
+
+                    <div id="currentIcon" class="task-icon">
+                        🍳
+                    </div>
+
+                    <h2 id="currentTaskName">
+                        Eat Breakfast
+                    </h2>
+
+                    <div class="time-range">
+                        <span id="taskStartTime">06:00</span>
+                        <span>→</span>
+                        <span id="taskEndTime">06:15</span>
+                    </div>
+
+                    <div class="countdown-title">
+                        Time Remaining
+                    </div>
+
+                    <div id="countdown" class="countdown">
+                        15:00
+                    </div>
+
+                    <div class="progress-container">
+                        <div id="progressBar" class="progress-bar"></div>
+                    </div>
+
+                    <button id="btnDone" class="done-button">
+                        ✓ DONE
+                    </button>
+
+                </div>
+
+                <div id="doneMessage" class="done-message hidden">
+                    <div class="done-icon">🎉</div>
+                    <div class="done-text">ALL DONE!</div>
+                </div>
+
+            </div>
+
+            <div class="timeline-title">
+                📋 Today's Schedule
+            </div>
+
+            <div id="timelineList" class="timeline-list">
+            </div>
+
+            <div class="control-buttons">
+
+                <button id="btnStart" class="start-button">
+                    ▶ START
+                </button>
+
+                <button id="btnReset" class="reset-button">
+                    ↻ RESET
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Man hinh thiet lap -->
+        <section id="screenSettings" class="screen hidden">
+
+            <div class="settings-header">
+                <button id="btnBack" class="back-button">
+                    ← Back
+                </button>
+
+                <h2>⚙ Settings</h2>
+            </div>
+
+            <div class="settings-card">
+
+                <label for="startTime">
+                    ⏰ Start Time
+                </label>
+
+                <input
+                    type="time"
+                    id="startTime"
+                    value="06:00"
+                >
+
+            </div>
+
+            <div class="settings-card">
+
+                <label>
+                    📅 Active Days
+                </label>
+
+                <div id="daysCheckboxList" class="days-checkbox-list">
+                </div>
+
+            </div>
+
+            <div class="settings-card">
+
+                <label class="toggle-row" for="autoStartToggle">
+                    <span>🤖 Auto-start on schedule</span>
+                    <input
+                        type="checkbox"
+                        id="autoStartToggle"
+                        checked
+                    >
+                </label>
+
+            </div>
+
+            <div class="settings-card">
+
+                <div class="settings-title-row">
+                    <h3>📝 Task List</h3>
+
+                    <button id="btnAddTask" class="add-button">
+                        + Add Task
+                    </button>
+                </div>
+
+                <div id="settingsTaskList">
+                </div>
+
+            </div>
+
+            <div class="settings-actions">
+
+                <button id="btnSaveSettings" class="save-button">
+                    💾 SAVE SETTINGS
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="app.js"></script>
+
+<script>
+    // Dang ky service worker de app cai duoc nhu native app va chay offline
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+            navigator.serviceWorker
+                .register("service-worker.js")
+                .catch(function (error) {
+                    console.log("Dang ky service worker that bai:", error);
+                });
+        });
+    }
+</script>
+
+</body>
+</html>

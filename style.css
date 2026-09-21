@@ -1,0 +1,488 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f5f8;
+    color: #222;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: white;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background: #1976d2;
+    color: white;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.header p {
+    margin: 5px 0 0;
+    font-size: 16px;
+}
+
+.settings-button {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 16px;
+    background: white;
+    color: #1976d2;
+    font-weight: bold;
+}
+
+.screen {
+    padding: 25px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.clock-box {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#currentClock {
+    font-size: 38px;
+    font-weight: bold;
+}
+
+#currentDate {
+    margin-top: 5px;
+    color: #666;
+}
+
+.current-task-box {
+    text-align: center;
+    border-radius: 20px;
+    padding: 25px;
+    background: #eef7ff;
+    border: 2px solid #c9e5ff;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+/* Trang thai canh bao con 1 phut */
+.current-task-box.warning {
+    background: #fff3e0;
+    border-color: #ff9800;
+    animation: pulseWarning 1s infinite;
+}
+
+@keyframes pulseWarning {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 12px rgba(255, 152, 0, 0);
+    }
+}
+
+.current-task-box.warning .countdown {
+    color: #e65100;
+}
+
+.step-info {
+    color: #555;
+    font-weight: bold;
+}
+
+.task-icon {
+    font-size: 70px;
+    margin: 10px 0;
+}
+
+.current-task-box h2 {
+    margin: 5px 0 10px;
+    font-size: 32px;
+}
+
+.time-range {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.countdown-title {
+    margin-top: 20px;
+    color: #666;
+}
+
+.countdown {
+    font-size: 70px;
+    font-weight: bold;
+    margin: 5px 0 15px;
+}
+
+.progress-container {
+    width: 100%;
+    height: 15px;
+    background: #d9d9d9;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #1976d2;
+    transition: width 0.5s linear;
+}
+
+.done-button {
+    margin-top: 20px;
+    width: 80%;
+    max-width: 400px;
+    border: none;
+    border-radius: 15px;
+    padding: 18px;
+    background: #2e7d32;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.done-button:hover {
+    background: #1b5e20;
+}
+
+/* Man hinh hoan thanh toan bo cong viec */
+.done-message {
+    padding: 30px 10px;
+}
+
+.done-icon {
+    font-size: 80px;
+    margin-bottom: 10px;
+}
+
+.done-text {
+    font-size: 34px;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+/* Banner nhac bat am thanh */
+.audio-unlock-banner {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    text-align: center;
+    padding: 12px;
+    background: #ff9800;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.timeline-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 30px 0 12px;
+}
+
+.timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.timeline-item {
+    display: grid;
+    grid-template-columns: 80px 50px 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 12px;
+    background: #f4f4f4;
+    border: 2px solid transparent;
+}
+
+.timeline-item.active {
+    border-color: #1976d2;
+    background: #e8f3ff;
+}
+
+.timeline-item.completed {
+    background: #e8f5e9;
+    opacity: 0.75;
+}
+
+.timeline-time {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.timeline-icon {
+    font-size: 28px;
+    text-align: center;
+}
+
+.timeline-name {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.timeline-duration {
+    color: #666;
+    font-size: 14px;
+    margin-top: 3px;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.start-button,
+.reset-button {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.start-button {
+    background: #1976d2;
+    color: white;
+}
+
+.reset-button {
+    background: #eeeeee;
+    color: #333;
+}
+
+
+/* Man hinh thiet lap */
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.settings-header h2 {
+    margin: 0;
+}
+
+.back-button {
+    border: none;
+    background: #eeeeee;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.settings-card {
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.settings-card label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#startTime {
+    width: 180px;
+    padding: 12px;
+    font-size: 20px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+/* Danh sach checkbox chon ngay ap dung */
+.days-checkbox-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.day-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+}
+
+.day-checkbox input {
+    width: 18px;
+    height: 18px;
+}
+
+/* Dong bat/tat tu dong bat dau */
+.toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.toggle-row input {
+    width: 22px;
+    height: 22px;
+}
+
+.settings-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.settings-title-row h3 {
+    margin: 0;
+}
+
+.add-button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #1976d2;
+    color: white;
+    font-weight: bold;
+}
+
+.setting-task {
+    display: grid;
+    grid-template-columns: 45px 1fr 120px 45px;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.task-number {
+    text-align: center;
+    font-weight: bold;
+}
+
+.task-name-input,
+.task-duration-input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.task-duration-input {
+    text-align: center;
+}
+
+.delete-task-button {
+    border: none;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    background: #ffebee;
+    color: #c62828;
+    font-size: 18px;
+}
+
+.settings-actions {
+    text-align: center;
+}
+
+.save-button {
+    border: none;
+    border-radius: 12px;
+    padding: 16px 30px;
+    background: #2e7d32;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+/* Man hinh nho */
+
+@media (max-width: 650px) {
+
+    .header {
+        padding: 15px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .settings-button {
+        padding: 9px;
+        font-size: 14px;
+    }
+
+    .screen {
+        padding: 15px;
+    }
+
+    .current-task-box h2 {
+        font-size: 25px;
+    }
+
+    .countdown {
+        font-size: 55px;
+    }
+
+    .timeline-item {
+        grid-template-columns: 65px 40px 1fr;
+    }
+
+    .setting-task {
+        grid-template-columns: 35px 1fr;
+    }
+
+    .task-duration-input {
+        grid-column: 2;
+    }
+
+    .delete-task-button {
+        position: absolute;
+        right: 25px;
+    }
+
+    .control-buttons {
+        flex-direction: column;
+    }
+}
