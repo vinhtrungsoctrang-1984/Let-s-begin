@@ -1,5 +1,5 @@
 // Ten cache, tang so nay len moi khi cap nhat app de xoa cache cu
-const CACHE_NAME = "lich-sang-v1";
+const CACHE_NAME = "lich-sang-v3";
 
 // Danh sach file can cache de app chay duoc khi mat mang
 const FILES_TO_CACHE = [
@@ -46,13 +46,29 @@ self.addEventListener("activate", function (event) {
     self.clients.claim();
 });
 
-// Lay file: uu tien cache, neu khong co thi moi goi mang
+// Lay file: uu tien tai ban moi nhat tu mang truoc (network-first)
+// Chi dung ban da cache khi khong co mang (offline)
+// Cach nay dam bao moi lan cap nhat code tren GitHub se duoc ap dung ngay
 self.addEventListener("fetch", function (event) {
 
     event.respondWith(
-        caches.match(event.request).then(function (response) {
+        fetch(event.request)
+            .then(function (response) {
 
-            return response || fetch(event.request);
-        })
+                // Tai thanh cong tu mang: cap nhat lai cache voi ban moi nhat
+                const responseClone = response.clone();
+
+                caches.open(CACHE_NAME).then(function (cache) {
+
+                    cache.put(event.request, responseClone);
+                });
+
+                return response;
+            })
+            .catch(function () {
+
+                // Khong co mang: dung tam ban da luu trong cache
+                return caches.match(event.request);
+            })
     );
 });
